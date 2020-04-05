@@ -4,6 +4,9 @@ public class AdminAccount extends Account{
 	public AdminAccount(String name, String username, String password,AccountType acctType) {
 		super(name, username, password, acctType);
 	}
+	public AdminAccount() {
+		
+	}
 	
 	Account account;
 	AccountType accountType;
@@ -17,11 +20,13 @@ public class AdminAccount extends Account{
 	DataWriter dW=new DataWriter();
 
   public void addShow(String type, String name, String time1, String time2, String description,String ratings) {
-	  show.add(new Show(type, name, time1, time2, description, ratings));
-	  dW.getShowsJSON(show);
+	  Show show=new Show(type, name, time1, time2, description, ratings);
+	  dW.writeShowsJSON(show);
   }
   
   public void removeShow(Show show) {
-    dW.removeShowsJSON(show);
+	//if(show.getName()=this.name){
+		dW.removeShowsJSON(show);
+	}
   }
-}
+

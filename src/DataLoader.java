@@ -10,14 +10,14 @@ public class DataLoader extends DataConstants{
 		ArrayList<Account> accounts = new ArrayList<Account>();
 
 		try {
-			FileReader reader = new FileReader(ACCOUNTS_FILE_NAME);
-			//¿do we need this?
-			//JSONParser parser = new JSONParser();
-			JSONArray accountsJSON = (JSONArray)new JSONParser().parse(reader);
+			JSONParser parser = new JSONParser();
+			Object object = parser.parse(new FileReader(ACCOUNTS_FILE_NAME));
+			JSONObject data = (JSONObject) object;
+			
 
-			for(int i=0; i < accountsJSON.size(); i++) {
+			for(int i=0; i < data.size(); i++) {
 				//for accounts
-				JSONObject accountJSON = (JSONObject)accountsJSON.get(i);
+				JSONObject accountJSON = (JSONObject)data.get(i);
 				String name = (String)accountJSON.get(ACCOUNTS_NAME);
 				String username = (String)accountJSON.get(ACCOUNTS_USERNAME);
 				String password = (String)accountJSON.get(ACCOUNTS_PASSWORD);
@@ -39,14 +39,15 @@ public class DataLoader extends DataConstants{
 		ArrayList<Show> showslist = new ArrayList<Show>();
 
 		try {
-			FileReader reader = new FileReader(SHOWSLIST_FILE_NAME);
 			JSONParser parser = new JSONParser();
-			JSONArray showslistJSON = (JSONArray)new JSONParser().parse(reader);
+			Object object = parser.parse(new FileReader(SHOWSLIST_FILE_NAME));
+			JSONArray showData = (JSONArray) object;
+			
 
-			for(int i=0; i <showslistJSON.size(); i++) {
+			for(int i=0; i <showData.size(); i++) {
 
 				//for shows
-				JSONObject showsJSON = (JSONObject)showslistJSON.get(i);
+				JSONObject showsJSON = (JSONObject)showData.get(i);
 				String showType = (String)showsJSON.get(SHOWLIST_TYPE);
 				String showName = (String)showsJSON.get(SHOWLIST_NAME);
 				String time1 = (String)showsJSON.get(SHOWLIST_TIME1);
@@ -62,9 +63,10 @@ public class DataLoader extends DataConstants{
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
 
-		return null;
+		
 	}
 
 

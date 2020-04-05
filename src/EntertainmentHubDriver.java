@@ -1,7 +1,8 @@
+import java.io.IOException;
 
 public class EntertainmentHubDriver {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		DriverHelper DH=new DriverHelper();
 		//Show show=new Show();

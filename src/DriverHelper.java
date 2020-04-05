@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 public class DriverHelper {
 	
@@ -7,7 +10,8 @@ public class DriverHelper {
 	EntertainmentHub entHub=new EntertainmentHub();
 
 	public Account logIn(Account account) {
-		System.out.println("1) Login or 2) Continue as guest");
+		AdminAccount aa=new AdminAccount();
+		System.out.println("1) Login or 2) Continue as guest or 3) Admin");
 		int answer=key.nextInt();
 		switch(answer) {
 		case 1:
@@ -19,8 +23,35 @@ public class DriverHelper {
 			System.out.println("Logging in...\nWhat would you like to do next?");//check to make sure checking for account
 			break;
 		case 2:
-			System.out.println("Continuing as guest...");	
+			System.out.println("Continuing as guest...");
+			break;
+		case 3:
+			System.out.println("1) Add show\n2)Remove show");
+			int ans=key.nextInt();
+			key.nextLine();
+			if(ans==1) {
+				System.out.println("Enter show type: ");
+				String type=key.nextLine();
+				System.out.println("Enter show name: ");
+				String name=key.nextLine();
+				System.out.println("Enter time 1: ");
+				String t1=key.nextLine();
+				System.out.println("Enter time 2: ");
+				String t2=key.nextLine();
+				System.out.println("Enter description: ");
+				String description=key.nextLine();
+				System.out.println("Enter rating in the form of 1-5 stars: ");
+				String stars=key.nextLine();
+				aa.addShow(type, name, t1, t2, description, stars);
+			}
+			else if(ans==2) {
+				System.out.println("Enter show name to remove: ");
+				String remName=key.nextLine();
+				//if(remName==show.getName())
+				
+			}
 		}
+			
 		return account;
 	}
 	public Account createAccount(Account account) {
@@ -61,7 +92,7 @@ public class DriverHelper {
 		}
 	}
 	
-	public Tickets buyTickets() {
+	public void buyTickets() throws IOException {
 		Account account=new Account();
 		Show show=new Show();
 		Tickets ticket=new Tickets();
@@ -93,21 +124,58 @@ public class DriverHelper {
 		System.out.println("How many tickets would you like to purchase?");
 		int purchNum=key.nextInt();
 		key.nextLine();
+		System.out.println("Your price comes out to: " + (ticket.getPrice()*purchNum));//fix later
+		System.out.println("Entering payment...\n"
+				+ "Enter your card type:");
+		String cardType=key.nextLine();
+		System.out.println("Enter the name displayed on your card: ");
+		String name=key.nextLine();
+		System.out.println("Enter your card number: ");
+		int cardNum=key.nextInt();
+		key.nextLine();
+		System.out.println("Enter the PIN on the back of your card: ");
+		int pin=key.nextInt();
+		key.nextLine();
+		System.out.println("Enter the card's expiration date in the form of Month.Year (ex: 10.23): ");
+		double expDate=key.nextDouble();
+		key.nextLine();
+		account.addPayment(cardType, name, cardNum, pin, expDate);
+		
+		Tickets[] ticketsArr=new Tickets[purchNum];
+		int rowNum=0;
+		int colNum=0;
+		File file=new File("C:\\Users\\Laura\\eclipse-workspace\\EntertainmentHub\\src\\TicketStub.txt");
+		FileWriter eraser=new FileWriter(file);
+		eraser.write("");
 		for(int i=0;i<purchNum;i++) {
+			Tickets newTicket=new Tickets();
+			newTicket.setName(showChoice);
+			newTicket.setTime(timeChoice);
 			System.out.println("Pick your seat by row number: ");
-			int rowNum=key.nextInt();
+			rowNum=key.nextInt();
+			newTicket.setRow(rowNum);
 			key.nextLine();
 			System.out.println("Pick your seat by column number: ");
-			int colNum=key.nextInt();
+			colNum=key.nextInt();
 			key.nextLine();
-		}
+			newTicket.setColumn(colNum);
+			key.nextLine();
+			ticketsArr[i]=newTicket;
+			newTicket.writeTicketStub();
+			}
+		
 		System.out.println("Enter your account type: Student, Adult, Teacher, Senior, Guest, or Veteran");
 		AccountType acctType=getAccountType(key.next());
-		account.setAccountType(acctType);
-		RA.createDiscount();
-		System.out.println("Your new price is: " +ticket.getPrice());
+		RA.account.setAccountType(acctType);
+		RA.createDiscount(ticketsArr[0]);
+		System.out.println("Your new price is: $" +ticketsArr[0].getPrice());
 		//have option to print tickets
-		return null;
+		
+		System.out.println("Payment was successful!"
+				+ "\nPrinting your ticket...\n");
+		
+		
+		
 	}
 	
 	//pick a seat method
@@ -168,7 +236,7 @@ public class DriverHelper {
 	
 	
 	
-	public void runSim() {
+	public void runSim() throws IOException {
 		Account account=new Account();
 		//while loop to keep running
 		logIn(account);

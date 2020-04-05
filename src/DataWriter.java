@@ -1,8 +1,12 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class DataWriter extends DataConstants {
 
@@ -28,13 +32,30 @@ public class DataWriter extends DataConstants {
 	}
 
 	public static JSONObject getAccountJSON(Account account) {
-		JSONObject accountDetails = new JSONObject();
-		accountDetails.put(ACCOUNTS_NAME, account.getName());
-		accountDetails.put(ACCOUNTS_USERNAME, account.getUsername());
-		accountDetails.put(ACCOUNTS_PASSWORD, account.getPassword());
-		accountDetails.put(ACCOUNTS_ACCTTYPE, account.getPassword());
-
-		return accountDetails;
+		JSONParser parser = new JSONParser();
+		Object object;
+		try {
+			object = parser.parse(new FileReader(ACCOUNTS_FILE_NAME));
+			JSONObject accountDetails = (JSONObject) object;
+			accountDetails.put(ACCOUNTS_NAME, account.getName());
+			accountDetails.put(ACCOUNTS_USERNAME, account.getUsername());
+			accountDetails.put(ACCOUNTS_PASSWORD, account.getPassword());
+			accountDetails.put(ACCOUNTS_ACCTTYPE, account.getPassword());
+			return accountDetails;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	public static void saveShows() {
 		Showlist showlists = Showlist.getInstance();
@@ -43,11 +64,11 @@ public class DataWriter extends DataConstants {
 
 		// creating the json objects
 		for (int i = 0; i < friends.size(); i++) {
-			jsonFriendsACC.add(getShowsJSON(friends.get(i)));
+			jsonFriendsACC.add(writeShowsJSON(friends.get(i)));
 		}
 
 		// Writing the JSON file
-		try (FileWriter file = new FileWriter(ACCOUNTS_FILE_NAME)) {
+		try (FileWriter file = new FileWriter(SHOWSLIST_FILE_NAME)) {
 
 			file.write(jsonFriendsACC.toJSONString());
 			file.flush();
@@ -57,8 +78,8 @@ public class DataWriter extends DataConstants {
 		}
 	}
 
-	public static JSONObject getShowsJSON(Show show) {
-		JSONObject showDetails = new JSONObject();
+	public static void writeShowsJSON(Show show) {
+		loadShows();
 		showDetails.put(SHOWLIST_TYPE, show.getshowType());
 		showDetails.put(SHOWLIST_NAME, show.getName());
 		showDetails.put(SHOWLIST_TIME1, show.gettime1());
@@ -66,10 +87,15 @@ public class DataWriter extends DataConstants {
 		showDetails.put(SHOWLIST_DESCRIPTION, show.getDescription());
 		showDetails.put(SHOWLIST_RATINGS, show.getRating());
 		
-		return showDetails;
+		try {
+			FileWriter JSONwriter = new FileWriter(SHOWSLIST_FILE_NAME);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public static JSONObject removeShowsJSON(Show show) {
+	public static void removeShowsJSON(Show show) {
 		JSONObject showDetails1 = new JSONObject();
 		showDetails1.remove(SHOWLIST_TYPE, show.getshowType());
 		showDetails1.remove(SHOWLIST_NAME, show.getName());
@@ -78,7 +104,7 @@ public class DataWriter extends DataConstants {
 		showDetails1.remove(SHOWLIST_DESCRIPTION, show.getDescription());
 		showDetails1.remove(SHOWLIST_RATINGS, show.getRating());
 		
-		return showDetails1;
+		saveShows();
 	}
 	
 	
