@@ -1,14 +1,24 @@
+/**
+ * This class contains all the methods necessary for use in runSim, 
+ * which controls the entire program.
+ */
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 public class DriverHelper {
-	
+
 	Scanner key=new Scanner(System.in);
-	
 	EntertainmentHub entHub=new EntertainmentHub();
 
+	/**
+	 * This method takes in an account and logs user in based on whether they want 
+	 * to login normally, continue as a guest, or login as an admin user
+	 * @param account-of the user attempting to login
+	 * @return- account of the logged in user
+	 */
 	public Account logIn(Account account) {
 		AdminAccount aa=new AdminAccount();
 		System.out.println("1) Login or 2) Continue as guest or 3) Admin");
@@ -20,7 +30,7 @@ public class DriverHelper {
 			System.out.println("Enter your password: ");
 			String password=key.next();
 			account.loginAccount(username, password);
-			System.out.println("Logging in...\nWhat would you like to do next?");//check to make sure checking for account
+			System.out.println("Logging in...\n");//check to make sure checking for account
 			break;
 		case 2:
 			System.out.println("Continuing as guest...");
@@ -47,13 +57,18 @@ public class DriverHelper {
 			else if(ans==2) {
 				System.out.println("Enter show name to remove: ");
 				String remName=key.nextLine();
-				//if(remName==show.getName())
-				
+				aa.removeShow(remName);
 			}
 		}
-			
 		return account;
 	}
+
+	/**
+	 * This method creates a new account based on the user's input of their 
+	 * account details
+	 * @param account-being created
+	 * @return-account that has just been created
+	 */
 	public Account createAccount(Account account) {
 		System.out.println("Enter your full name: ");
 		String name=key.nextLine();
@@ -67,7 +82,12 @@ public class DriverHelper {
 		account.addAccount(name, userName, passWord, acctType);//make sure its adding it to the arrayList of accounts
 		return account;
 	}
-	
+
+	/**
+	 * This method takes a string account type from the user and returns its enum account type
+	 * @param string-corresponds to an account type
+	 * @return-the account type that was determined from the string
+	 */
 	public AccountType getAccountType(String string) {
 		if(string.equalsIgnoreCase("student")) {
 			return AccountType.Student;
@@ -91,7 +111,14 @@ public class DriverHelper {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * This method allows users to buy a ticket for a show (movie, play, or concert), 
+	 * view a seating chart and chose their seats, as well as the quantity of tickets 
+	 * they want to purchase.  It also prompts the user to enter their payment information 
+	 * for their order, and finally displays their ticket in a text document.
+	 * @throws IOException
+	 */
 	public void buyTickets() throws IOException {
 		Account account=new Account();
 		Show show=new Show();
@@ -140,7 +167,7 @@ public class DriverHelper {
 		double expDate=key.nextDouble();
 		key.nextLine();
 		account.addPayment(cardType, name, cardNum, pin, expDate);
-		
+
 		Tickets[] ticketsArr=new Tickets[purchNum];
 		int rowNum=0;
 		int colNum=0;
@@ -162,25 +189,22 @@ public class DriverHelper {
 			key.nextLine();
 			ticketsArr[i]=newTicket;
 			newTicket.writeTicketStub();
-			}
-		
+		}
 		System.out.println("Enter your account type: Student, Adult, Teacher, Senior, Guest, or Veteran");
 		AccountType acctType=getAccountType(key.next());
 		RA.account.setAccountType(acctType);
 		RA.createDiscount(ticketsArr[0]);
 		System.out.println("Your new price is: $" +ticketsArr[0].getPrice());
 		//have option to print tickets
-		
+
 		System.out.println("Payment was successful!"
 				+ "\nPrinting your ticket...\n");
-		
-		
-		
 	}
-	
-	//pick a seat method
-	//pick a row/column
-	
+
+	/**
+	 * This method displays a complete list of movies, plays and concerts based on what the 
+	 * user says they want to see
+	 */
 	public void view() {
 		System.out.println("Would you like to view 1) movies, 2) plays, or 3) concerts?");
 		int Choice=key.nextInt();
@@ -200,31 +224,32 @@ public class DriverHelper {
 			System.out.println(Choice + " wasn't one of the above options!");
 		}
 	}
-	
 
+
+	/**
+	 * This method allows the user to write a review for a show of their choice.
+	 */
 	public void writeReview() {
-		Event event=new Event();//fix later
+		Event event=new Event();
 		System.out.println("Which show would you like to review?");
 		String rev=key.nextLine();
-		//figure out how to link show to review
 		event.setName(rev);
 		System.out.println("Enter Username: ");
 		String userName1=key.nextLine();
 		System.out.println("Enter stars from 1-5: ");
 		int stars=key.nextInt();
 		key.nextLine();
-		//System.out.println("Line 126");
 		System.out.println("Enter comment: ");
 		String comment=key.nextLine();
-		//System.out.println("Line 129");
 		Reviews rev1=new Reviews(userName1, stars, comment);
-		//System.out.println("Line 131");
 		event.setReviews(event.getName(), rev1);
-		//System.out.println("I'm here");
 		System.out.println(rev1);
-		
+
 	}
-	
+
+	/**
+	 * Displays the interface menu
+	 */
 	public void displayMainMenu() {
 		System.out.println("What would you like to do?\n"
 				+ "1) Create Account\n"
@@ -233,9 +258,13 @@ public class DriverHelper {
 				+ "4) Write a Review\n"
 				+ "5) Quit");
 	}
-	
-	
-	
+
+
+	/**
+	 * Using the other helper methods within this class, this method controls 
+	 * the entire interface of the program
+	 * @throws IOException
+	 */
 	public void runSim() throws IOException {
 		Account account=new Account();
 		//while loop to keep running
@@ -263,8 +292,6 @@ public class DriverHelper {
 			default:
 				System.out.println("Invalid input, enter a number from 1-6!");
 			}
-			
 		}
 	}
-
 }

@@ -1,12 +1,5 @@
 
-Name: Wcie
-Time: 1PM
-Price: 11.0
+Name: Jungle Book
+Time: 9 PM
 Seat row: 4
-Seat column: 9
-
-Name: Wcie
-Time: 1PM
-Price: 11.0
-Seat row: 2
-Seat column: 5
+Seat column: 8

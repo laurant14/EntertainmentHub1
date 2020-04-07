@@ -1,3 +1,7 @@
+/**
+ * This class writes to the JSON files
+ */
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,6 +14,9 @@ import org.json.simple.parser.ParseException;
 
 public class DataWriter extends DataConstants {
 
+	/**
+	 * This method saves the accounts to the JSON file
+	 */
 	public static void saveAccounts() {
 		accounts accounts1 = accounts.getInstance();
 		ArrayList<Account> friends = accounts1.getAccount();
@@ -31,6 +38,11 @@ public class DataWriter extends DataConstants {
 		}
 	}
 
+	/**
+	 * This method adds accounts to the JSON file
+	 * @param account-of type Account
+	 * @return- a JSONObject
+	 */
 	public static JSONObject getAccountJSON(Account account) {
 		JSONParser parser = new JSONParser();
 		Object object;
@@ -55,46 +67,51 @@ public class DataWriter extends DataConstants {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
-	public static void saveShows() {
-		Showlist showlists = Showlist.getInstance();
-		ArrayList<Show> friends = showlists.getShowList();
-		JSONArray jsonFriendsACC = new JSONArray();
 
-		// creating the json objects
-		for (int i = 0; i < friends.size(); i++) {
-			jsonFriendsACC.add(writeShowsJSON(friends.get(i)));
+	/**
+	 * This method writes the shows to the JSON files
+	 */
+	public static void writeShowsJSON() {
+		Showlist showlist = Showlist.getInstance();
+		ArrayList<Show> shows = showlist.getShowList();
+		JSONArray showsJSONArray = new JSONArray();
+		for (int i = 0; i < shows.size(); i++) {
+			showsJSONArray.add(createShowsObject(shows.get(i)));
 		}
+		try (FileWriter file = new FileWriter(SHOWSLIST_FILE_NAME, false)) {
 
-		// Writing the JSON file
-		try (FileWriter file = new FileWriter(SHOWSLIST_FILE_NAME)) {
-
-			file.write(jsonFriendsACC.toJSONString());
+			file.write(showsJSONArray.toJSONString());
 			file.flush();
+			file.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void writeShowsJSON(Show show) {
-		loadShows();
+	/**
+	 * The method returns the JSONObject
+	 * @param show-to be added to the JSON file
+	 * @return-the JSONObject that has been added
+	 */
+	public static JSONObject createShowsObject(Show show) {
+		
+		//FileWriter JSONwriter = new FileWriter(SHOWSLIST_FILE_NAME);
+		JSONObject showDetails = new JSONObject();
 		showDetails.put(SHOWLIST_TYPE, show.getshowType());
 		showDetails.put(SHOWLIST_NAME, show.getName());
 		showDetails.put(SHOWLIST_TIME1, show.gettime1());
 		showDetails.put(SHOWLIST_TIME2, show.gettime2());
 		showDetails.put(SHOWLIST_DESCRIPTION, show.getDescription());
 		showDetails.put(SHOWLIST_RATINGS, show.getRating());
-		
-		try {
-			FileWriter JSONwriter = new FileWriter(SHOWSLIST_FILE_NAME);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return showDetails;
 	}
-	
+
+	/**
+	 * This method removes the specified show from the JSON files
+	 * @param show-to be removed from the JSON files
+	 */
 	public static void removeShowsJSON(Show show) {
 		JSONObject showDetails1 = new JSONObject();
 		showDetails1.remove(SHOWLIST_TYPE, show.getshowType());
@@ -103,10 +120,7 @@ public class DataWriter extends DataConstants {
 		showDetails1.remove(SHOWLIST_TIME2, show.gettime2());
 		showDetails1.remove(SHOWLIST_DESCRIPTION, show.getDescription());
 		showDetails1.remove(SHOWLIST_RATINGS, show.getRating());
-		
-		saveShows();
-	}
-	
-	
-	
+
+		writeShowsJSON();
+	}	
 }

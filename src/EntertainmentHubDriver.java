@@ -1,18 +1,16 @@
+/**
+ * @author Laura Trombetta, Sarayu Das, Veronica Tanukula
+ * The main method of the program.
+ * Uses the runSim method from the DriverHelper class to run through the program
+ */
+
 import java.io.IOException;
 
 public class EntertainmentHubDriver {
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		DriverHelper DH=new DriverHelper();
-		//Show show=new Show();
-		//show.initSeats();
-		//show.printChart();
 		System.out.println("Welcome to Entertainment Hub!");
 		DH.runSim();
-		
-		
-
 	}
-
 }

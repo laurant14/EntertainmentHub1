@@ -1,3 +1,7 @@
+/**
+ * This class is the structure to allow the creation of a new ticket
+ */
+
 import java.io.*;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
@@ -11,7 +15,14 @@ public class Tickets {
 	protected int column;
 	
 	
-	
+	/**
+	 * Constructor which creates new ticket using inputted information from the user
+	 * @param name-of Movie
+	 * @param time-of showing
+	 * @param price-of movie
+	 * @param row-seat
+	 * @param column-seat
+	 */
 	public Tickets(String name, String time, double price, int row, int column) {
 		this.name = name; 
 		this.time = time; 
@@ -20,7 +31,21 @@ public class Tickets {
 		this.column=column;
 	}
 	
+	/**
+	 * Default constructor which sets each attribute to a default value
+	 */
+	public Tickets() {
+		this.price=11.00;
+		this.name=" ";
+		this.time=" ";
+		this.row=0;
+		this.column=0;
+	}
 	
+	/**
+	 * This method takes the ticket that was created and writes it to a text document to "print" the ticket
+	 * @throws IOException
+	 */
 	public void writeTicketStub() throws IOException {
 
 		File file = new File("C:\\Users\\Laura\\eclipse-workspace\\EntertainmentHub\\src\\TicketStub.txt");
@@ -29,20 +54,11 @@ public class Tickets {
 		FileWriter writer = new FileWriter(file,true);
 		writer.write("\nName: "+this.getName() + "\n"
 				+ "Time: "+this.getTime()+"\n"
-				+ "Price: "+this.getPrice()+"\n"
 				+ "Seat row: "+this.getRow()+"\n"
 				+ "Seat column: "+this.getColumn()+"\n");
 		writer.close();
 	}
 
-	public Tickets() {
-		this.price=11.00;
-		this.name=" ";
-		this.time=" ";
-		this.row=0;
-		this.column=0;
-		
-	}
 	public String getName() {
 		return this.name;
 	}
@@ -91,7 +107,6 @@ public class Tickets {
 		if (this.price >= 0.0)
 			this.price = price;
 	}
-	
 	
 	public String toString() {
 		return "Show: " + this.show + "\n Time: " + this.time + "\n Price: " + this.price + "\n Enjoy your show!";

@@ -1,10 +1,13 @@
+/**
+ * This class allows for creating a new show.
+ * It creates a seating chart for the users to be able to pick their specific seats.
+ * It is the parent of the Event class.
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Show {
-
-	Venue venue;
-	//private String type;
 	private String name;
 	private String time1;
 	private String time2;
@@ -13,7 +16,18 @@ public class Show {
 	private char seats[][]=new char[11][11];
 	private Event event;
 	private String showType;
+	static ArrayList<Show> shows = new ArrayList<Show>();
+	Venue venue;
 
+	/**
+	 * Takes in necessary attributes to create a new show
+	 * @param showType-type of show to be created (Movie, Play, Concert)
+	 * @param name-of the show
+	 * @param time1-first showing
+	 * @param time2-second showing
+	 * @param description-of the show
+	 * @param ratings-of the show
+	 */
 	public Show(String showType, String name, String time1, String time2, String description,String ratings) {
 		this.showType=showType;
 		this.name=name;
@@ -21,20 +35,20 @@ public class Show {
 		this.time2=time2;
 		this.description=description;
 		this.ratings=ratings;
-
 	}
+	
 	public Show() {
 
 	}
+	
 	public Show(String username, int stars, String comment) {
-		// TODO Auto-generated constructor stub
+		
 	}
-
-	ArrayList<Show> shows = new ArrayList<Show>();
 
 	public String getshowType() {
 		return this.showType;
 	}
+	
 	public void setshowType(String type) {
 		this.showType = type;
 	}
@@ -42,9 +56,11 @@ public class Show {
 	public String getName() {
 		return this.name;
 	}
+	
 	public void setShowName(String name) {
 		this.name = name;
 	}
+	
 	public String gettime1() {
 		return this.time1;
 	}
@@ -69,17 +85,28 @@ public class Show {
 		this.description = description;
 	}
 
-	public String getRating(){
+	public String getRating() {
 		return this.ratings;
 	}
 
-	public void setRatings(String ratings){
+	public void setRatings(String ratings) {
 		this.ratings = ratings;
 	}
 
+	public Event getEvent() {
+		return this.event;
+	}
 
-
-
+	public void setSeats(char seats[][]) {
+		this.seats = seats;
+	}
+	public String getVenue() {
+		return "Venue: " +venue.toString();
+	}
+	
+	/**
+	 * This method initializes the seating chart with randomly places taken seats
+	 */
 	public void initSeats() {
 		Random r=new Random();
 		for(int i = 0; i < seats.length; i++) {
@@ -102,15 +129,11 @@ public class Show {
 				seats[i][j]='H';
 			}
 		}
-
-		/*for(int i = 0; i < seats.length; i++) {
-			for(int j=0;j<seats[i].length;j++) {
-				System.out.print(seats[i][j]);
-			}
-			System.out.println();
-		}*/
 	}
 
+	/**
+	 * This method prints the seating chart
+	 */
 	public void printChart() {
 		initSeats();
 		System.out.print("      ");
@@ -126,31 +149,4 @@ public class Show {
 			System.out.println();
 		}
 	}
-	public int getSeats() {
-		int count = 0;
-		for(int i = 0; i < seats.length; i++) {
-			for(int j=0;j<seats.length;j++) {
-				System.out.print(seats[i][j]);
-			}
-		}
-		return count;
-	}
-
-	public Event getEvent() {
-		return this.event;
-	}
-
-	public void setSeats(char seats[][]) {
-		this.seats = seats;
-	}
-	public String getVenue() {
-		return "Venue: " +venue.printVenue();
-	}
-
-	//to add show from admin account
-	public static void add(Show show) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
