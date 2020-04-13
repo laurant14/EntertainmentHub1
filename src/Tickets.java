@@ -16,7 +16,7 @@ public class Tickets {
 	
 	
 	/**
-	 * Constructor which creates new ticket using inputted information from the user
+	 * Constructor which creates new ticket using inputed information from the user
 	 * @param name-of Movie
 	 * @param time-of showing
 	 * @param price-of movie
